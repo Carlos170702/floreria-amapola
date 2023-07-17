@@ -4,7 +4,7 @@ import UseReduc from "./UseReduc";
 import { apiQueries } from "../api/ApiQueries";
 import { toast } from "react-hot-toast";
 import { GET_FLOWERS, LOGIN, RESET, UPDATE_USER } from "./types";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 
 export const InitialStates = ({ children }) => {
   const [loading, setLoading] = useState(false);
@@ -17,28 +17,26 @@ export const InitialStates = ({ children }) => {
 
   const [state, dispatch] = useReducer(UseReduc, initialState);
 
-  //obtener los usuario
+  //login
   const login = async (
     dataUSer = { user: "DONT_SEND_USER", password: "DONT_SEND_PASSWORD" }
   ) => {
-    const { password, user } = dataUSer;
     setLoading(true);
     try {
-      const { data } = await apiQueries(`/getusuario/${user}`);
+      const { data } = await apiQueries.post(`/login`, {
+        User: dataUSer.user,
+        Password: dataUSer.password,
+      });
 
       if (data?.error) {
         setLoading(false);
-        return toast.error("Usuario no encontrado", {
+        return toast.error(data?.message, {
           duration: 1000,
         });
       }
 
-      if (data?.message?.contrasena !== password) {
-        setLoading(false);
-        return toast.error("Contraseña incorrecta", {
-          duration: 1000,
-        });
-      }
+      // Guardar el token en localStorage
+      localStorage.setItem("token", JSON.stringify(data?.message?.token));
 
       const newData = {
         logged: true,
@@ -57,6 +55,44 @@ export const InitialStates = ({ children }) => {
     } catch (e) {
       console.log(e);
       setLoading(false);
+    }
+  };
+
+  // validar Token
+  const validToken = async (token) => {
+    setLoading(true);
+    try {
+      const { data } = await apiQueries.post(
+        "/validarToken",
+        {},
+        {
+          headers: {
+            "x-token": JSON.parse(token),
+          },
+        }
+      );
+
+      if (data?.error) {
+        setLoading(false);
+        return toast.success(data?.message);
+      }
+
+      const newData = {
+        logged: true,
+        dataUser: data.message,
+      };
+
+      dispatch({
+        type: LOGIN,
+        payload: newData,
+      });
+
+      navigate("/");
+      setLoading(false);
+      return;
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
     }
   };
 
@@ -90,6 +126,7 @@ export const InitialStates = ({ children }) => {
 
   // retablecer todo
   const reset = () => {
+    localStorage.clear();
     dispatch({
       type: RESET,
       payload: initialState,
@@ -114,6 +151,7 @@ export const InitialStates = ({ children }) => {
         getFlowers,
         reset,
         updateUser,
+        validToken,
       }}
     >
       {children}

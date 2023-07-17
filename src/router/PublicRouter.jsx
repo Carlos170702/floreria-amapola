@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 export const PublicRouter = ({ children }) => {
   const navigate = useNavigate();
-  const { logged } = useContext(UseContex);
+  const { logged, validToken } = useContext(UseContex);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    validToken(token);
+  }, []);
 
   useEffect(() => {
     if (logged) {

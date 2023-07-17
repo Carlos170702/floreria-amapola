@@ -53,14 +53,14 @@ export const NavBar = () => {
                 >
                   Registrar proveedor
                 </Link>
+                <Link
+                  to={"/registerProduct"}
+                  className=" hover:underline tracking-wider font-mono"
+                >
+                  Registrar Producto
+                </Link>
               </>
             )}
-            <Link
-              to={"/registerProduct"}
-              className=" hover:underline tracking-wider font-mono"
-            >
-              Registrar Producto
-            </Link>
             <Link
               to={"/login"}
               onClick={reset}
