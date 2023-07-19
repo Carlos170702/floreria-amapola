@@ -7,6 +7,7 @@ export const useRegisterProduct = () => {
   const [loading, setLoading] = useState(false);
   const [colors, setColors] = useState([]);
   const [types, setTypes] = useState([]);
+  const [products, setProducts] = useState([]);
 
   //   obtiene los colores
   const getColors = async (colors) => {
@@ -45,7 +46,7 @@ export const useRegisterProduct = () => {
   }, []);
 
   //   subir haimage a cloudinary
-  const uploadImage = async (dataProduct) => {
+  const uploadImage = async (dataProduct, reset) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", dataProduct?.imageURL[0]);
@@ -63,7 +64,7 @@ export const useRegisterProduct = () => {
       );
 
       const newData = { ...dataProduct, imageURL: data?.secure_url };
-      addProduct(newData);
+      addProduct(newData, reset);
       toast.success("Imagen subida correctamente");
       setLoading(false);
     } catch (error) {
@@ -72,13 +73,17 @@ export const useRegisterProduct = () => {
     }
   };
 
-  const addProduct = async (newDataProduct) => {
+  const addProduct = async (newDataProduct, reset) => {
     const newProduct = {
       imageURL: newDataProduct?.imageURL,
       Caracteristicas: newDataProduct?.Caracteristicas,
       Nombre: newDataProduct?.Nombre,
       CvColor: newDataProduct?.CvColor,
       CvTipo: newDataProduct?.CvTipo,
+      Existencia: newDataProduct?.Existencia,
+      Stock: newDataProduct?.Stock,
+      PreVenta: newDataProduct?.PreVenta,
+      Preccompra: newDataProduct?.Preccompra,
     };
 
     try {
@@ -90,6 +95,7 @@ export const useRegisterProduct = () => {
       }
 
       toast.success("Producto agregado correctamente");
+      reset();
     } catch (error) {
       console.log(error);
       toast.error("Error del servidor");
@@ -104,14 +110,52 @@ export const useRegisterProduct = () => {
     reader.readAsDataURL(image);
   };
 
+  const getProducts = async () => {
+    try {
+      const { data } = await apiQueries("/getProducts");
+
+      if (data?.error) {
+        return toast.error("Error");
+      }
+
+      setProducts(data?.message);
+    } catch (error) {
+      toast.error("error");
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const deleteProduct = (id) => {
+    try {
+      const { data } = apiQueries.delete(`/deleteProduct/${id}`);
+
+      console.log(data)
+    } catch (error) {
+      toast.error("Error");
+      console.log(error);
+    }
+
+    const newProducts = products.filter(
+      (product) => product.CvInventario != id
+    );
+
+    setProducts(newProducts);
+  };
+
   return {
     // properties
     colors,
     types,
     imageSelected,
     loading,
+    products,
     // methods
     uploadImage,
     handleImageSelected,
+    deleteProduct,
   };
 };

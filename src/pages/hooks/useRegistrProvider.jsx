@@ -43,7 +43,7 @@ export const useRegistrProvider = () => {
   const addProvider = async (dataProvider, reset) => {
     const newProvider = {
       Telefono: dataProvider?.Telefono,
-      ApePaterno: dataProvider?.ApePaterno,
+      ApePaterno: dataProvider?.Encargado,
       ApeMaterno: dataProvider?.ApeMaterno,
       Nombre: dataProvider?.Nombre,
       RFC: dataProvider?.RFC,

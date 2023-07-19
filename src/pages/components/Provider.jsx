@@ -23,18 +23,18 @@ export const Provider = ({
   };
   return (
     <tr className="text-center">
-      <td className="border text-xs">{dataProvider?.CvProveedor}</td>
-      <td className="border text-xs">{dataProvider?.Nombre}</td>
-      <td className="border text-xs">{dataProvider?.ApePaterno}</td>
-      <td className="border text-xs">{dataProvider?.ApeMaterno}</td>
-      <td className="border text-xs">{dataProvider?.Correo}</td>
-      <td className="border text-xs">{dataProvider?.Telefono}</td>
-      <td className="border text-xs">{dataProvider?.RFC}</td>
-      <td className="border text-xs">{dataProvider?.Calle}</td>
-      <td className="border text-xs">{dataProvider?.NumCas}</td>
-      <td className="border text-xs">{dataProvider?.DsEstado}</td>
-      <td className="border text-xs">{dataProvider?.DsCiudad}</td>
-      <td className="border text-xs">{dataProvider?.DsPais}</td>
+      <td className="border text-xs px-1">{dataProvider?.CvProveedor}</td>
+      <td className="border text-xs px-1">{dataProvider?.Nombre}</td>
+      <td className="border text-xs px-1">{dataProvider?.ApePaterno}</td>
+      {/* <td className="border tex px-1t-xs">{dataProvider?.ApeMaterno}</td> */}
+      <td className="border text-xs px-1">{dataProvider?.Correo}</td>
+      <td className="border text-xs px-1">{dataProvider?.Telefono}</td>
+      <td className="border text-xs px-1">{dataProvider?.RFC}</td>
+      <td className="border text-xs px-1">{dataProvider?.Calle}</td>
+      <td className="border text-xs px-1">{dataProvider?.NumCas}</td>
+      <td className="border text-xs px-1">{dataProvider?.DsEstado}</td>
+      <td className="border text-xs px-1">{dataProvider?.DsCiudad}</td>
+      <td className="border text-xs px-1">{dataProvider?.DsPais}</td>
       <td className="border text-xs flex gap-1">
         <button
           className=" p-2 px-3 bg-red-400 text-white rounded uppercase cursor-pointer"

@@ -24,7 +24,7 @@ export const RegistrProvider = () => {
   } = useForm({
     defaultValues: {
       ApeMaterno: "",
-      ApePaterno: "",
+      Encargado: "",
       Calle: "",
       Correo: "",
       CvCiudad: "SELECCIONA UNA CIUDAD",
@@ -60,7 +60,6 @@ export const RegistrProvider = () => {
     setValue("CvDireccion", data?.CvDireccion);
   };
 
-
   return (
     <>
       <NavBar />
@@ -87,31 +86,17 @@ export const RegistrProvider = () => {
               )}
             </div>
             {/* apellidos */}
-            <div className="grid grid-cols-2 gap-x-2">
-              <div className="">
-                <label className="w-[80px] text-right">Apellido Paterno:</label>
-                <input
-                  placeholder={"ApePaterno"}
-                  {...register("ApePaterno", { required: true })}
-                  type="text"
-                  className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-[#FFA9A9] shadow-md shadow-[#cdcdcd50] flex-1 py-1 px-2 text-[10px]"
-                />
-                {errors.ApePaterno && (
-                  <p className="text-red-600">Apellido requerido</p>
-                )}
-              </div>
-              <div className="">
-                <label className="w-[80px] text-right">Apellido materno:</label>
-                <input
-                  placeholder={"ApeMaterno"}
-                  {...register("ApeMaterno", { required: true })}
-                  type="text"
-                  className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-[#FFA9A9] shadow-md shadow-[#cdcdcd50] flex-1 py-1 px-2 text-[10px]"
-                />
-                {errors.ApeMaterno && (
-                  <p className="text-red-600">Apellido requerido</p>
-                )}
-              </div>
+            <div className="flex gap-2">
+              <label className="w-[80px] text-right">Encargado:</label>
+              <input
+                placeholder={"Encargado"}
+                {...register("Encargado", { required: true })}
+                type="text"
+                className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-[#FFA9A9] shadow-md shadow-[#cdcdcd50] flex-1 py-1 px-2 text-[10px]"
+              />
+              {errors.Encargado && (
+                <p className="text-red-600">Apellido requerido</p>
+              )}
             </div>
             {/* corero */}
             <div>
@@ -199,9 +184,9 @@ export const RegistrProvider = () => {
             <thead className="border">
               <tr className="">
                 <th className="px-3 border text-blue-400">ID</th>
-                <th className="px-3 border text-blue-400">Nombre</th>
-                <th className="px-3 border text-blue-400">Apellido paterno</th>
-                <th className="px-3 border text-blue-400">Apellido materno</th>
+                <th className="px-3 border text-blue-400">Empresa</th>
+                <th className="px-3 border text-blue-400">Encargado</th>
+                {/* <th className="px-3 border text-blue-400">Apellido materno</th> */}
                 <th className="px-3 border text-blue-400">Correo</th>
                 <th className="px-3 border text-blue-400">Telefono</th>
                 <th className="px-3 border text-blue-400">RFC</th>

@@ -7,6 +7,7 @@ import { RegistrProvider } from "../RegistrProvider";
 import { UseContex } from "../../context/UseContex";
 import { Error404 } from "../Error404";
 import { RegisterProduct } from "../RegisterProduct";
+import { MenuAnuncios } from "../MenuAnuncios";
 
 export const AppRouter = () => {
   const { dataUser } = useContext(UseContex);
@@ -19,6 +20,7 @@ export const AppRouter = () => {
       <Route path="/registerProvider" element={dataUser?.DsRol === 'ADMINISTRADOR' ?<RegistrProvider /> : <Navigate to={'/Error404'} />} />
       <Route path="/registerProduct" element={dataUser?.DsRol === 'ADMINISTRADOR' ?<RegisterProduct /> : <Navigate to={'/Error404'} />}/>
       <Route path="/Error404" element={<Error404 />} />
+      <Route path="/Anuncios" element={<MenuAnuncios />} />
     </Routes>
   );
 };
