@@ -5,7 +5,8 @@ import { useForm } from "../../hooks/useForm";
 
 export const useMenuProductos = () => {
   const [colors, setColors] = useState(null);
-  const { getFlowers, allFlowers, loading } = useContext(UseContex);
+  const { getFlowers, allFlowers, loading, flowerSelected } =
+    useContext(UseContex);
   const [flowersFilter, setFlowersFilter] = useState();
   const { formState, onInputChange } = useForm({
     Nombre: "",
@@ -65,6 +66,7 @@ export const useMenuProductos = () => {
     colors,
     formState,
     flowersFilter,
+    flowerSelected,
     // methods
     onInputChange,
   };

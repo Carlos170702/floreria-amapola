@@ -5,6 +5,7 @@ import { BiMenu } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UseContex } from "../../context/UseContex";
+import { IoCartOutline, IoFlowerOutline, IoLogOutOutline, IoPeopleCircleOutline, IoPersonOutline } from "react-icons/io5";
 
 export const NavBar = () => {
   const { reset, dataUser } = useContext(UseContex);
@@ -41,31 +42,45 @@ export const NavBar = () => {
           <div className="flex-1 gap-2 rounded p-2 flex flex-col">
             <Link
               to={"/perfil"}
-              className="hover:underline tracking-wider font-mono"
+              className="hover:underline tracking-wider font-mono flex items-center gap-2"
             >
+              <IoPersonOutline />
               Mi Cuenta
             </Link>
-            {dataUser?.DsRol === "ADMINISTRADOR" && (
+            {dataUser?.DsRol === "ADMINISTRADOR" ? (
               <>
                 <Link
                   to={"/registerProvider"}
-                  className=" hover:underline tracking-wider font-mono"
+                  className=" hover:underline tracking-wider font-mono flex items-center gap-2"
                 >
+                  <IoPeopleCircleOutline />
                   Registrar proveedor
                 </Link>
                 <Link
                   to={"/registerProduct"}
-                  className=" hover:underline tracking-wider font-mono"
+                  className=" hover:underline tracking-wider font-mono flex items-center gap-2"
                 >
+                  <IoFlowerOutline />
                   Registrar Producto
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to={"/flowerCart"}
+                  className=" hover:underline tracking-wider font-mono flex items-center gap-2"
+                >
+                  <IoCartOutline />
+                  Carrito
                 </Link>
               </>
             )}
             <Link
               to={"/login"}
               onClick={reset}
-              className=" hover:underline tracking-wider font-mono text-red-500"
+              className=" hover:underline tracking-wider font-mono text-red-500 flex items-center gap-2"
             >
+              <IoLogOutOutline />
               Cerrar Sección
             </Link>
           </div>

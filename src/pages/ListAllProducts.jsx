@@ -2,13 +2,15 @@ import { CardProduct } from "./components/CardProduct";
 import { AiOutlineSearch } from "react-icons/ai";
 import { NavBar } from "./components/NavBar";
 import { useMenuProductos } from "./hooks/useMenuProductos";
+import { ModalProduct } from "./components/ModalProduct";
 
 export const ListAllProducts = () => {
-  const { colors, formState, onInputChange, flowersFilter } =
+  const { colors, formState, onInputChange, flowersFilter, flowerSelected } =
     useMenuProductos();
 
   return (
     <>
+      {flowerSelected && <ModalProduct flowerSelected={flowerSelected} />}
       <NavBar />
       <div className="w-width_contenedor ml-auto mr-auto mt-5 flex gap-5">
         <div className="relative w-[220px]">

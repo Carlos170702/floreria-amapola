@@ -9,7 +9,9 @@ export const PublicRouter = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    validToken(token);
+    if (token) {
+      validToken(token);
+    }
   }, []);
 
   useEffect(() => {

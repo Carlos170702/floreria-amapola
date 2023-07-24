@@ -8,19 +8,22 @@ export const RegisterProduct = () => {
   const {
     colors,
     types,
-    uploadImage,
-    imageSelected,
-    handleImageSelected,
+    addProduct,
     loading,
     products,
     deleteProduct,
+    activeUpdate,
+    setValuesUpdate,
+    resetAll,
+    updateProduct,
   } = useRegisterProduct();
   const {
     setValue,
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    formState: { errors, defaultValues },
   } = useForm({
     defaultValues: {
       Nombre: "",
@@ -42,22 +45,12 @@ export const RegisterProduct = () => {
     )
       return toast.error("Selecciona un color y un tipo");
 
-    if (data?.PrecCompra > data?.PreVenta)
-      return toast.error("Precios no validos");
+    // if (data?.PrecCompra > data?.PreVenta)
+    //   return toast.error("Precios no validos");
 
-    uploadImage(data, reset);
-  };
+    if (data?.imageURL.length <= 0) return toast.error("Selecciona una imagen");
 
-  const setValuesUpdate = (data) => {
-    setValue("Nombre", data?.Nombre);
-    setValue("Existencia", data?.Existencia);
-    setValue("Stock", data?.Stock);
-    setValue("CvColor", data?.CvColor);
-    setValue("CvTipo", data?.CvTipo);
-    setValue("Caracteristicas", data?.Caracteristicas);
-    setValue("imageURL", data?.imageURL);
-    setValue("PreVenta", data?.PreVenta);
-    setValue("PrecCompra", data?.PrecCompra);
+    activeUpdate ? updateProduct(data, reset) : addProduct(data, reset);
   };
 
   return (
@@ -70,6 +63,9 @@ export const RegisterProduct = () => {
             className="flex-1 gap-y-5 flex flex-col p-3 w-[350px] border"
             onSubmit={handleSubmit(onSubmit)}
           >
+            <h2 className="text-center font-bold tracking-widest text-xl">
+              Productos
+            </h2>
             {/* nombre */}
             <div>
               <div className="flex gap-2">
@@ -186,6 +182,7 @@ export const RegisterProduct = () => {
                 />
               </div>
             </div>
+            {/* seleccionar una imagen */}
             <div className=" flex flex-col items-center gap-y-2">
               <div className="flex items-center">
                 <img
@@ -195,27 +192,28 @@ export const RegisterProduct = () => {
                 />
                 <input
                   className="flex-1"
-                  {...register("imageURL", { required: true })}
+                  {...register("imageURL")}
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleImageSelected(e?.target?.files[0])}
                 />
               </div>
-              {imageSelected && (
-                <img
-                  src={imageSelected}
-                  className="w-max h-max  object-contain"
-                  alt="Imagen seleccionada"
-                />
-              )}
             </div>
 
-            <div className=" flex justify-center">
+            <div className=" flex justify-around">
               <button
                 type="submit"
-                className="cursor-pointer flex justify-center items-center bg-[#FF81D4] px-6 py-2 rounded-2xl text-white font-bold tracking-wider"
+                className="cursor-pointer flex justify-center items-center bg-[#FF81D4] px-6 py-2 rounded-2xl text-white font-bold tracking-widest"
               >
-                Registrar
+                {activeUpdate ? "Actualizar" : "Registrar"}
+              </button>
+
+              <button
+                type="submit"
+                className="cursor-pointer flex justify-center items-center bg-red-500 px-6 py-2 rounded-2xl text-white font-bold tracking-widest"
+                disabled={!activeUpdate}
+                onClick={() => resetAll(reset)}
+              >
+                Cancelar
               </button>
             </div>
           </form>
@@ -238,7 +236,7 @@ export const RegisterProduct = () => {
               {products.length > 0 &&
                 products?.map((product, index) => (
                   <tr className="" key={product?.CvInventario}>
-                    <td className=" border px-2 text-center">{index}</td>
+                    <td className=" border px-2 text-center">{index + 1}</td>
                     <td className=" border px-2 ">{product?.Nombre}</td>
                     <td className=" border px-2 text-center">
                       {product?.Existencia}
@@ -262,7 +260,7 @@ export const RegisterProduct = () => {
                         Eliminar
                       </button>
                       <button
-                        onClick={() => setValuesUpdate(product)}
+                        onClick={() => setValuesUpdate(product, setValue)}
                         className=" p-2 px-3 bg-indigo-500 text-white rounded uppercase cursor-pointer"
                       >
                         Editar

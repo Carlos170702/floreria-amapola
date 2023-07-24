@@ -46,7 +46,7 @@ export const RegistrProvider = () => {
   const activeUpdateProvider = (data) => {
     handleupdateActive(true);
     setValue("ApeMaterno", data?.ApeMaterno);
-    setValue("ApePaterno", data?.ApePaterno);
+    setValue("Encargado", data?.ApePaterno);
     setValue("Calle", data?.Calle);
     setValue("Correo", data?.Correo);
     setValue("CvCiudad", data?.CvCiudad);

@@ -10,6 +10,7 @@ export const Login = () => {
     user: "",
     password: "",
   });
+
   const { login, loading } = useContext(UseContex);
 
   return (
@@ -53,7 +54,10 @@ export const Login = () => {
               </div>
               {/* restablecer contraseña */}
               <div className="text-right">
-                <Link className="underline text-blue-600" to={"/forgetPassword"}>
+                <Link
+                  className="underline text-blue-600"
+                  to={"/forgetPassword"}
+                >
                   Restablecer contraseña
                 </Link>
               </div>

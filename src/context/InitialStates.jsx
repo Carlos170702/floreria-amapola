@@ -3,8 +3,16 @@ import { UseContex } from "./UseContex";
 import UseReduc from "./UseReduc";
 import { apiQueries } from "../api/ApiQueries";
 import { toast } from "react-hot-toast";
-import { GET_FLOWERS, LOGIN, RESET, UPDATE_USER } from "./types";
-import { json, useNavigate } from "react-router-dom";
+import {
+  ADD_TO_CAR,
+  GET_FLOWERS,
+  LOGIN,
+  REMOVE_FROM_CAR,
+  RESET,
+  SELECT_FLOWER,
+  UPDATE_USER,
+} from "./types";
+import { useNavigate } from "react-router-dom";
 
 export const InitialStates = ({ children }) => {
   const [loading, setLoading] = useState(false);
@@ -12,7 +20,9 @@ export const InitialStates = ({ children }) => {
   const initialState = {
     logged: false,
     dataUser: null,
-    allFlowers: null,
+    allFlowers: [],
+    flowerSelected: null,
+    car: [],
   };
 
   const [state, dispatch] = useReducer(UseReduc, initialState);
@@ -140,6 +150,27 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  const handleSelectFlower = (flowerSelected) => {
+    dispatch({
+      type: SELECT_FLOWER,
+      payload: flowerSelected,
+    });
+  };
+
+  const addCar = (flower) => {
+    dispatch({
+      type: ADD_TO_CAR,
+      payload: flower,
+    });
+  };
+
+  const deleteCar = (flower) => {
+    dispatch({
+      type: REMOVE_FROM_CAR,
+      payload: flower,
+    });
+  };
+
   return (
     <UseContex.Provider
       value={{
@@ -152,6 +183,9 @@ export const InitialStates = ({ children }) => {
         reset,
         updateUser,
         validToken,
+        handleSelectFlower,
+        addCar,
+        deleteCar,
       }}
     >
       {children}

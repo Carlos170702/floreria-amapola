@@ -5,17 +5,18 @@ import icon_whatsapp from ".././assets/icon_whatsapp.png";
 import { useNavigate } from "react-router-dom";
 import { useMenuProductos } from "./hooks/useMenuProductos";
 import { Loading } from "./components/Loading";
+import { ModalProduct } from "./components/ModalProduct";
 
 export const MenuProductos = () => {
-  const { allFlowers, loading } = useMenuProductos();
+  const { allFlowers, loading, flowerSelected } = useMenuProductos();
   const navigate = useNavigate();
 
   return (
-    <div className="relative">
+    <div>
+      {flowerSelected && <ModalProduct flowerSelected={flowerSelected} />}
       {loading && <Loading />}
       <NavBar />
       <Carrucel_header />
-
       <div className="w-width_contenedor ml-auto mr-auto mb-5 mt-10 grid grid-cols-2 sm:grid-col-3 md:grid-cols-4 lg:grid-col-5 gap-5 justify-items-center relative">
         {!!allFlowers ? (
           allFlowers?.map((flower, index) => (
@@ -29,7 +30,7 @@ export const MenuProductos = () => {
         )}
       </div>
 
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mb-6">
         <button
           type="submit"
           onClick={() => navigate("/listProducts")}
@@ -39,7 +40,7 @@ export const MenuProductos = () => {
         </button>
       </div>
 
-      <button className="bottom-12 right-10 fixed w-[60px] ">
+      <button className="bottom-12 right-10 fixed w-[60px]" onClick={() => navigate('/flowerCart')}>
         <img src={icon_whatsapp} alt="icono de whatsapp" />
       </button>
     </div>

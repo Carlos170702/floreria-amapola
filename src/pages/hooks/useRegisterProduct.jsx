@@ -3,11 +3,11 @@ import { apiQueries } from "../../api/ApiQueries";
 import { toast } from "react-hot-toast";
 
 export const useRegisterProduct = () => {
-  const [imageSelected, setImageSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [colors, setColors] = useState([]);
   const [types, setTypes] = useState([]);
   const [products, setProducts] = useState([]);
+  const [activeUpdate, setActiveUpdate] = useState(false);
 
   //   obtiene los colores
   const getColors = async (colors) => {
@@ -46,10 +46,10 @@ export const useRegisterProduct = () => {
   }, []);
 
   //   subir haimage a cloudinary
-  const uploadImage = async (dataProduct, reset) => {
+  const uploadImage = async (image) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("file", dataProduct?.imageURL[0]);
+    formData.append("file", image);
     formData.append("upload_preset", "floreria-amapola");
 
     try {
@@ -63,30 +63,33 @@ export const useRegisterProduct = () => {
         }
       );
 
-      const newData = { ...dataProduct, imageURL: data?.secure_url };
-      addProduct(newData, reset);
       toast.success("Imagen subida correctamente");
-      setLoading(false);
+      return data?.secure_url;
     } catch (error) {
+      setLoading(false);
       toast.error("Error del servidor");
       console.log(error);
+      return;
     }
   };
 
-  const addProduct = async (newDataProduct, reset) => {
-    const newProduct = {
-      imageURL: newDataProduct?.imageURL,
-      Caracteristicas: newDataProduct?.Caracteristicas,
-      Nombre: newDataProduct?.Nombre,
-      CvColor: newDataProduct?.CvColor,
-      CvTipo: newDataProduct?.CvTipo,
-      Existencia: newDataProduct?.Existencia,
-      Stock: newDataProduct?.Stock,
-      PreVenta: newDataProduct?.PreVenta,
-      Preccompra: newDataProduct?.Preccompra,
-    };
-
+  // agregar buevo producto
+  const addProduct = async (dataProducto, reset) => {
     try {
+      const URL_IMAGE = await uploadImage(dataProducto?.imageURL[0]);
+
+      const newProduct = {
+        imageURL: URL_IMAGE,
+        Caracteristicas: dataProducto?.Caracteristicas,
+        Nombre: dataProducto?.Nombre,
+        CvColor: dataProducto?.CvColor,
+        CvTipo: dataProducto?.CvTipo,
+        Existencia: dataProducto?.Existencia,
+        Stock: dataProducto?.Stock,
+        PreVenta: dataProducto?.PreVenta,
+        Preccompra: dataProducto?.PrecCompra,
+      };
+
       const { data } = await apiQueries.post("addProduct", newProduct);
 
       if (data?.error) {
@@ -95,19 +98,14 @@ export const useRegisterProduct = () => {
       }
 
       toast.success("Producto agregado correctamente");
+      getProducts();
       reset();
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       toast.error("Error del servidor");
     }
-  };
-
-  const handleImageSelected = (image) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImageSelected(reader.result);
-    };
-    reader.readAsDataURL(image);
   };
 
   const getProducts = async () => {
@@ -129,33 +127,97 @@ export const useRegisterProduct = () => {
     getProducts();
   }, []);
 
-  const deleteProduct = (id) => {
+  const deleteProduct = async (id) => {
     try {
-      const { data } = apiQueries.delete(`/deleteProduct/${id}`);
+      const { data } = await apiQueries.delete(`/deleteProduct/${id}`);
 
-      console.log(data)
+      if (data?.error) {
+        return toast.error(data?.message);
+      }
+
+      toast.success(data?.message);
+      const newProducts = products.filter(
+        (product) => product.CvInventario != id
+      );
+      setProducts(newProducts);
     } catch (error) {
       toast.error("Error");
       console.log(error);
     }
+  };
 
-    const newProducts = products.filter(
-      (product) => product.CvInventario != id
-    );
+  // establecer valores para actualizar
+  const setValuesUpdate = (data, setValue) => {
+    setActiveUpdate(true);
+    setValue("Nombre", data?.Nombre);
+    setValue("Existencia", data?.Existencia);
+    setValue("Stock", data?.Stock);
+    setValue("CvColor", data?.CvColor);
+    setValue("CvTipo", data?.CvTipo);
+    setValue("Caracteristicas", data?.Caracteristicas);
+    setValue("imageURL", data?.imageURL);
+    setValue("PreVenta", data?.PreVenta);
+    setValue("PrecCompra", data?.PrecCompra);
+    setValue("CvInventario", data?.CvInventario);
+    setValue("CvProducto", data?.CvProducto);
+  };
 
-    setProducts(newProducts);
+  // restablecer a valores por defecto
+  const resetAll = (reset) => {
+    setActiveUpdate(false);
+    reset();
+  };
+
+  // actualizar datos del producto
+  const updateProduct = async (dataProduct, reset) => {
+    setLoading(true);
+    let URL_IMAGE = null;
+    if (typeof dataProduct?.imageURL !== "string") {
+      URL_IMAGE = await uploadImage(dataProduct?.imageURL[0]);
+    }
+    const newDataProduct = {
+      imageURL: URL_IMAGE || dataProduct?.imageURL,
+      Caracteristicas: dataProduct?.Caracteristicas,
+      Nombre: dataProduct?.Nombre,
+      CvColor: dataProduct?.CvColor,
+      CvTipo: dataProduct?.CvTipo,
+      PreVenta: dataProduct?.PreVenta,
+      Preccompra: dataProduct?.PrecCompra,
+      Existencia: dataProduct?.Existencia,
+      Stock: dataProduct?.Stock,
+      CvProducto: dataProduct?.CvProducto,
+      CvInventario: dataProduct?.CvInventario,
+    };
+    try {
+      const { data } = await apiQueries.post("/updateProduct", newDataProduct);
+
+      if (data?.error) {
+        setLoading(false)
+        return toast.error("Error al actualizar producto")
+      }
+
+      toast.success(data?.message)
+      setLoading(false);
+      reset();
+    } catch (error) {
+      setLoading(false);
+      toast.error("Error");
+      console.log(error);
+    }
   };
 
   return {
     // properties
     colors,
     types,
-    imageSelected,
     loading,
     products,
+    activeUpdate,
     // methods
-    uploadImage,
-    handleImageSelected,
     deleteProduct,
+    setValuesUpdate,
+    resetAll,
+    updateProduct,
+    addProduct,
   };
 };

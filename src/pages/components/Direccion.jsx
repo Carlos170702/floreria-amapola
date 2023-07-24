@@ -6,6 +6,7 @@ export const Direccion = ({
   errors,
   dataUser = null,
   updateUser = null,
+  isrequired = null,
 }) => {
   const [ciudades, setCiudades] = useState(null);
   const [estados, setEstados] = useState(null);
@@ -47,6 +48,7 @@ export const Direccion = ({
     getPaises();
   }, []);
 
+
   return (
     <div className="col-start-1 col-end-4">
       <div className="flex gap-x-3">
@@ -55,7 +57,7 @@ export const Direccion = ({
           <label>Calle:</label>
           <input
             placeholder={dataUser?.Calle || "Calle"}
-            {...register("Calle", { required: true })}
+            {...register("Calle", { required: isrequired ? isrequired : true })}
             type="text"
             className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-blue-300 pl-2"
           />
@@ -66,7 +68,7 @@ export const Direccion = ({
           <label>Num. casa</label>
           <input
             placeholder={dataUser?.NumCas || "NumCas"}
-            {...register("NumCas", { required: true })}
+            {...register("NumCas", { required: isrequired ? isrequired : true })}
             type="text"
             className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-blue-300 pl-2"
           />
