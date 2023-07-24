@@ -3,7 +3,8 @@ import { ProductCart } from "./components/ProductCart";
 import { useFlowerCar } from "./hooks/useFlowerCar";
 
 export const FlowerCart = () => {
-  const { tipoPago, car, subtotal, iva, total, date } = useFlowerCar();
+  const { tipoPago, car, subtotal, iva, total, date, handleChangeTipoPago } =
+    useFlowerCar();
 
   return (
     <>
@@ -39,6 +40,7 @@ export const FlowerCart = () => {
                   <select
                     defaultValue={0}
                     className=" border border-[#cdcdcd] rounded-2xl outline-none focus:border-blue-300 pl-1"
+                    onChange={handleChangeTipoPago}
                   >
                     <option disabled value={0}>
                       TIPO DE PAGO

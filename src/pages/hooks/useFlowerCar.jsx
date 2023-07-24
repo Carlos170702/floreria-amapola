@@ -8,8 +8,9 @@ export const useFlowerCar = () => {
   const [iva, setIva] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [date, setDate] = useState(null);
+  const [tipoPagoSelected, setTipoPagoSelected] = useState(0);
 
-  const { car } = useContext(UseContex);
+  const { car, dataUser } = useContext(UseContex);
 
   const getTipoPago = async () => {
     try {
@@ -51,7 +52,7 @@ export const useFlowerCar = () => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
 
-    const formattedDate = `${day}/${month}/${year}`;
+    const formattedDate = `${year}-${month}-${day}`;
     setDate(formattedDate);
   };
 
@@ -67,7 +68,21 @@ export const useFlowerCar = () => {
     calculateTotal();
   }, [iva]);
 
-  console.log(car)
+  const handleChangeTipoPago = (e) => {
+    setTipoPagoSelected(e.target.value);
+  };
+
+  // const makeSale = () => {
+  //   const dataSale = {
+  //     "Subtotal": subtotal,
+  //     "Iva": iva,
+  //     "Total": total,
+  //     "FechaVenta": date,
+  //     "CvUsuario": dataUser?.CvUsuarios,
+  //     "CvTipoDePago": tipoPagoSelected,
+  //     "flowers": car.map(flower => )
+  // }
+  // }
 
   return {
     // properties
@@ -78,5 +93,6 @@ export const useFlowerCar = () => {
     total,
     date,
     // methods
+    handleChangeTipoPago,
   };
 };
