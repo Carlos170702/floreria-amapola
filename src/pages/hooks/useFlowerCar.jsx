@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { apiQueries } from "../../api/ApiQueries";
 import { UseContex } from "../../context/UseContex";
+import { toast } from "react-hot-toast";
 
 export const useFlowerCar = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [tipoPago, setTipoPago] = useState([]);
   const [total, setTotal] = useState(0);
   const [iva, setIva] = useState(0);
@@ -10,7 +12,7 @@ export const useFlowerCar = () => {
   const [date, setDate] = useState(null);
   const [tipoPagoSelected, setTipoPagoSelected] = useState(0);
 
-  const { car, dataUser } = useContext(UseContex);
+  const { car, dataUser, deleteAllCar } = useContext(UseContex);
 
   const getTipoPago = async () => {
     try {
@@ -72,17 +74,55 @@ export const useFlowerCar = () => {
     setTipoPagoSelected(e.target.value);
   };
 
-  // const makeSale = () => {
-  //   const dataSale = {
-  //     "Subtotal": subtotal,
-  //     "Iva": iva,
-  //     "Total": total,
-  //     "FechaVenta": date,
-  //     "CvUsuario": dataUser?.CvUsuarios,
-  //     "CvTipoDePago": tipoPagoSelected,
-  //     "flowers": car.map(flower => )
-  // }
-  // }
+  const makeSale = async () => {
+    setIsLoading(true);
+    const dataSale = {
+      Subtotal: subtotal,
+      Iva: iva,
+      Total: total,
+      FechaVenta: date,
+      CvUsuario: dataUser?.CvUsuarios,
+      CvTipoDePago: tipoPagoSelected,
+      flowers: car.map((flower) => {
+        return {
+          Subtotal: flower?.PreVenta * flower.quantity,
+          Total: flower?.PreVenta * flower.quantity,
+          Cantidad: flower.quantity,
+          CvInventario: flower.CvInventario,
+        };
+      }),
+    };
+
+    try {
+      if (tipoPagoSelected == 0) {
+        setIsLoading(false);
+        return toast("Selecciona un tipo de pago", {
+          icon: "👍",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+
+      const { data } = await apiQueries.post("/addToVenta", dataSale);
+
+      if (data?.error) {
+        setIsLoading(false);
+        return toast.error(data?.message);
+      }
+
+      setTimeout(() => {
+        setIsLoading(false);
+        toast.success(data?.message);
+        deleteAllCar();
+      }, 2000);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
 
   return {
     // properties
@@ -92,7 +132,9 @@ export const useFlowerCar = () => {
     iva,
     total,
     date,
+    isLoading,
     // methods
     handleChangeTipoPago,
+    makeSale,
   };
 };

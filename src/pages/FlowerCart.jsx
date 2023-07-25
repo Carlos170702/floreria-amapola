@@ -1,13 +1,24 @@
+import { Loading } from "./components/Loading";
 import { NavBar } from "./components/NavBar";
 import { ProductCart } from "./components/ProductCart";
 import { useFlowerCar } from "./hooks/useFlowerCar";
 
 export const FlowerCart = () => {
-  const { tipoPago, car, subtotal, iva, total, date, handleChangeTipoPago } =
-    useFlowerCar();
+  const {
+    tipoPago,
+    car,
+    subtotal,
+    iva,
+    total,
+    date,
+    handleChangeTipoPago,
+    makeSale,
+    isLoading,
+  } = useFlowerCar();
 
   return (
     <>
+      {isLoading && <Loading />}
       <NavBar />
       <div className="w-full min-h-screen flex justify-center">
         <div
@@ -84,6 +95,7 @@ export const FlowerCart = () => {
               <button
                 type="submit"
                 className="cursor-pointer flex justify-center items-center bg-[#FF81D4] px-6 py-2 rounded-2xl text-white font-bold tracking-widest"
+                onClick={() => makeSale()}
               >
                 Pagar
               </button>

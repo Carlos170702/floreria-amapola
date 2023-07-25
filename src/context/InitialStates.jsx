@@ -1,10 +1,16 @@
+// Importar los módulos necesarios desde React
 import { useReducer, useState } from "react";
+// Importar el componente UseContex y la función UseReduc desde archivos locales
 import { UseContex } from "./UseContex";
 import UseReduc from "./UseReduc";
+// Importar las consultas a la API desde el archivo ApiQueries
 import { apiQueries } from "../api/ApiQueries";
+// Importar la función 'toast' para mostrar mensajes de notificación en la interfaz
 import { toast } from "react-hot-toast";
+// Importar las constantes de acción desde el archivo types
 import {
   ADD_TO_CAR,
+  DELETE_ALL_CAR,
   GET_FLOWERS,
   LOGIN,
   REMOVE_FROM_CAR,
@@ -12,11 +18,15 @@ import {
   SELECT_FLOWER,
   UPDATE_USER,
 } from "./types";
+// Importar el hook 'useNavigate' desde React Router DOM
 import { useNavigate } from "react-router-dom";
-
+// Definir el componente 'InitialStates' que será un proveedor de contexto para la aplicación
 export const InitialStates = ({ children }) => {
+  // Estado local para controlar el estado de carga de la aplicación
   const [loading, setLoading] = useState(false);
+  // Obtener la función 'navigate' para realizar redirecciones de navegación
   const navigate = useNavigate();
+  // Definir el estado inicial de la aplicación
   const initialState = {
     logged: false,
     dataUser: null,
@@ -24,10 +34,10 @@ export const InitialStates = ({ children }) => {
     flowerSelected: null,
     car: [],
   };
-
+  // Utilizar el hook 'useReducer' para gestionar el estado de la aplicación, usando el reducer 'UseReduc'
   const [state, dispatch] = useReducer(UseReduc, initialState);
 
-  //login
+  // Función 'login' para gestionar el proceso de inicio de sesión del usuario
   const login = async (
     dataUSer = { user: "DONT_SEND_USER", password: "DONT_SEND_PASSWORD" }
   ) => {
@@ -68,7 +78,7 @@ export const InitialStates = ({ children }) => {
     }
   };
 
-  // validar Token
+  // Función 'validToken' para validar el token del usuario con la API
   const validToken = async (token) => {
     setLoading(true);
     try {
@@ -106,7 +116,7 @@ export const InitialStates = ({ children }) => {
     }
   };
 
-  // obtener las flores
+  // Función 'getFlowers' para obtener la lista de flores desde la API
   const getFlowers = async () => {
     setLoading(true);
     try {
@@ -134,7 +144,7 @@ export const InitialStates = ({ children }) => {
     }
   };
 
-  // retablecer todo
+  // Función 'reset' para limpiar el almacenamiento local y restablecer el estado a su valor inicial
   const reset = () => {
     localStorage.clear();
     dispatch({
@@ -143,6 +153,7 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  // Función 'updateUser' para actualizar los datos del usuario en el estado
   const updateUser = (newDataUser) => {
     dispatch({
       type: UPDATE_USER,
@@ -150,6 +161,7 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  // Función 'handleSelectFlower' para actualizar la flor seleccionada en el estado
   const handleSelectFlower = (flowerSelected) => {
     dispatch({
       type: SELECT_FLOWER,
@@ -157,6 +169,7 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  // Función 'addCar' para agregar una flor al carrito en el estado
   const addCar = (flower) => {
     dispatch({
       type: ADD_TO_CAR,
@@ -164,6 +177,7 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  // Función 'deleteCar' para eliminar una flor del carrito en el estado
   const deleteCar = (flower) => {
     dispatch({
       type: REMOVE_FROM_CAR,
@@ -171,6 +185,15 @@ export const InitialStates = ({ children }) => {
     });
   };
 
+  // Función 'deleteAllCar' para eliminar todas las flores del carrito en el estado
+  const deleteAllCar = () => {
+    dispatch({
+      type: DELETE_ALL_CAR,
+      payload: [],
+    });
+  };
+
+  // Devolver el proveedor de contexto (UseContex.Provider) con los valores y métodos que estarán disponibles para los componentes hijos
   return (
     <UseContex.Provider
       value={{
@@ -186,6 +209,7 @@ export const InitialStates = ({ children }) => {
         handleSelectFlower,
         addCar,
         deleteCar,
+        deleteAllCar,
       }}
     >
       {children}
