@@ -7,9 +7,11 @@ export const useRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // funcion que hace el registro del nuevo usuario
   const handleRegister = async (dataUser) => {
     setIsLoading(true);
     try {
+      // se hace la petición a la api y te da los resultados tambien se le manda los datos de creacion de usuario
       const { data } = await apiQueries.post("/addUser", {
         ...dataUser,
         Contrasena: dataUser?.Contraseña,
@@ -22,9 +24,11 @@ export const useRegister = () => {
         return toast.error(data.message);
       }
 
+      // guarda el token en localStorage de lo q regreso la peticion
       localStorage.setItem("token", JSON.stringify(data.message));
       toast.success("Usuario registrado", { duration: 2000 });
 
+      // si se ejecuta todo bien te manda a login y valida el token
       setTimeout(() => {
         navigate("/");
         setIsLoading(false);

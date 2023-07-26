@@ -28,6 +28,7 @@ export const usePerfil = () => {
 
   // se actualiza los datos de direccion de la base de datos
   const updateDirection = async (newData) => {
+    // se crea un objeto con los datos que necesita la base de datos
     const newInfo = {
       NumCas: newData?.NumCas,
       Calle: newData?.Calle,
@@ -57,6 +58,7 @@ export const usePerfil = () => {
     }
   };
 
+  // actualiza el estado global de mi aplicacion con los nuevos valores
   const actualizarData = (data) => {
     onUpdateUser({ ...dataUser, ...data });
   };

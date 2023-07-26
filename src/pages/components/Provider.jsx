@@ -7,16 +7,21 @@ export const Provider = ({
   activeUpdateProvider,
 }) => {
   const deleteProvider = async (id) => {
+    // Se envía una solicitud a la API para eliminar el proveedor con el ID especificado
     try {
       const { data } = await apiQueries.delete(`/deleteProvider/${id}`);
 
+      // Si la respuesta de la API contiene un error, muestra un mensaje de error
       if (data?.error) {
         return toast.error("Proveedor no encontrado");
       }
 
+      // Si la eliminación es exitosa, actualiza el estado de los proveedores para reflejar los cambios en la interfaz
       updateProviders(id);
+      // Muestra un mensaje de éxito cuando el proveedor se ha eliminado correctamente
       toast.success("Proveedor eliminado");
     } catch (error) {
+      // Si ocurre un error al comunicarse con el servidor, muestra un mensaje de error
       toast.error("Error de servidor");
       console.log(error);
     }

@@ -17,7 +17,7 @@ export const MenuProductos = () => {
       {loading && <Loading />}
       <NavBar />
       <Carrucel_header />
-      <div className="w-width_contenedor ml-auto mr-auto mb-5 mt-10 grid grid-cols-2 sm:grid-col-3 md:grid-cols-4 lg:grid-col-5 gap-5 justify-items-center relative">
+      <div className="w-width_contenedor ml-auto mr-auto mb-5 mt-10 grid grid-cols-1 Movil:grid-cols-2 sm:grid-col-3 md:grid-cols-4 lg:grid-col-5 gap-5 justify-items-center relative">
         {!!allFlowers ? (
           allFlowers?.map((flower, index) => (
             <CardProduct

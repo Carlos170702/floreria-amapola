@@ -6,23 +6,26 @@ import { Provider } from "./components/Provider";
 import { Loading } from "./components/Loading";
 
 export const RegistrProvider = () => {
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'useRegistrProvider'
   const {
-    providers,
-    loading,
-    addDIrection,
-    updateProviders,
-    updateActive,
-    handleupdateActive,
-    updateDirection,
+    providers, // Lista de proveedores
+    loading, // Estado de carga
+    addDIrection, // Función para agregar dirección
+    updateProviders, // Función para actualizar proveedores
+    updateActive, // Estado para indicar si hay una actualización en curso
+    handleupdateActive, // Función para manejar la actualización activa
+    updateDirection, // Función para actualizar dirección
   } = useRegistrProvider();
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'useForm'
   const {
-    register,
-    handleSubmit,
-    formState: { errors, defaultValues },
-    reset,
-    setValue,
+    register, // Función para registrar campos del formulario
+    handleSubmit, // Función para manejar la presentación del formulario
+    formState: { errors, defaultValues }, // Estado del formulario y valores predeterminados
+    reset, // Función para reiniciar el formulario
+    setValue, // Función para establecer el valor de los campos del formulario
   } = useForm({
     defaultValues: {
+      // Valores predeterminados para el formulario
       ApeMaterno: "",
       Encargado: "",
       Calle: "",
@@ -37,14 +40,23 @@ export const RegistrProvider = () => {
     },
   });
 
+  // Función para manejar el envío del formulario
   const onSubmit = (data) => {
+    // Verificar si hay una actualización en curso ('updateActive' es true)
     updateActive
-      ? updateDirection(data, handleupdateActive, reset)
-      : addDIrection(data, reset);
+      ? // Si hay una actualización en curso, llamar a la función 'updateDirection' del hook 'useRegistrProvider'
+        // Pasar los datos del formulario, la función para manejar la actualización activa y la función para reiniciar el formulario ('reset')
+        updateDirection(data, handleupdateActive, reset)
+      : // Si no hay una actualización en curso, llamar a la función 'addDIrection' del hook 'useRegistrProvider'
+        // Pasar los datos del formulario y la función para reiniciar el formulario ('reset')
+        addDIrection(data, reset);
   };
 
+  // Función para activar la actualización de un proveedor
   const activeUpdateProvider = (data) => {
+    // Establecer 'updateActive' en true para indicar que hay una actualización en curso
     handleupdateActive(true);
+    // Establecer los valores de los campos del formulario con los datos del proveedor seleccionado
     setValue("ApeMaterno", data?.ApeMaterno);
     setValue("Encargado", data?.ApePaterno);
     setValue("Calle", data?.Calle);
@@ -65,9 +77,9 @@ export const RegistrProvider = () => {
       <NavBar />
       {loading && <Loading />}
       <div className="flex justify-center py-10 px-2">
-        <div className="flex gap-2 items-start">
+        <div className="grid grid-cols-1 gap-2 xl:grid-cols-autotable items-start">
           <form
-            className="flex-1 gap-y-5 flex flex-col p-3 w-[350px] border"
+            className="gap-y-5 flex flex-col p-3 max-w-[350px] border"
             onSubmit={handleSubmit(onSubmit)}
           >
             {/* nombre */}
@@ -180,37 +192,39 @@ export const RegistrProvider = () => {
               )}
             </div>
           </form>
-          <table>
-            <thead className="border">
-              <tr className="">
-                <th className="px-3 border text-blue-400">ID</th>
-                <th className="px-3 border text-blue-400">Empresa</th>
-                <th className="px-3 border text-blue-400">Encargado</th>
-                {/* <th className="px-3 border text-blue-400">Apellido materno</th> */}
-                <th className="px-3 border text-blue-400">Correo</th>
-                <th className="px-3 border text-blue-400">Telefono</th>
-                <th className="px-3 border text-blue-400">RFC</th>
-                <th className="px-3 border text-blue-400">Calle</th>
-                <th className="px-3 border text-blue-400">No.Casa</th>
-                <th className="px-3 border text-blue-400">Estado</th>
-                <th className="px-3 border text-blue-400">Ciudad</th>
-                <th className="px-3 border text-blue-400">Pais</th>
-                <th className="px-3 border text-blue-400">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="border">
-              {providers?.length > 0
-                ? providers?.map((provider, index) => (
-                    <Provider
-                      key={`${provider?.CvProveedor}${index}`}
-                      dataProvider={provider}
-                      activeUpdateProvider={activeUpdateProvider}
-                      updateProviders={updateProviders}
-                    />
-                  ))
-                : null}
-            </tbody>
-          </table>
+          <div className="overflow-auto xl:overflow-visible">
+            <table className="">
+              <thead className="border">
+                <tr className="">
+                  <th className="px-3 border text-blue-400">ID</th>
+                  <th className="px-3 border text-blue-400">Empresa</th>
+                  <th className="px-3 border text-blue-400">Encargado</th>
+                  {/* <th className="px-3 border text-blue-400">Apellido materno</th> */}
+                  <th className="px-3 border text-blue-400">Correo</th>
+                  <th className="px-3 border text-blue-400">Telefono</th>
+                  <th className="px-3 border text-blue-400">RFC</th>
+                  <th className="px-3 border text-blue-400">Calle</th>
+                  <th className="px-3 border text-blue-400">No.Casa</th>
+                  <th className="px-3 border text-blue-400">Estado</th>
+                  <th className="px-3 border text-blue-400">Ciudad</th>
+                  <th className="px-3 border text-blue-400">Pais</th>
+                  <th className="px-3 border text-blue-400">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="border">
+                {providers?.length > 0
+                  ? providers?.map((provider, index) => (
+                      <Provider
+                        key={`${provider?.CvProveedor}${index}`}
+                        dataProvider={provider}
+                        activeUpdateProvider={activeUpdateProvider}
+                        updateProviders={updateProviders}
+                      />
+                    ))
+                  : null}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>

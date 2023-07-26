@@ -6,14 +6,22 @@ import { NavBar } from "./components/NavBar";
 import { useForm } from "react-hook-form";
 
 export const Perfil = () => {
-  const { loading, dataUser, updateUser, actualizarData } = usePerfil();
-
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'usePerfil'
   const {
-    formState: { errors },
-    handleSubmit,
-    register,
+    loading, // Estado de carga
+    dataUser, // Datos del usuario
+    updateUser, // Función para actualizar datos del usuario
+    actualizarData, // Función para actualizar la información del usuario
+  } = usePerfil();
+
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'useForm'
+  const {
+    formState: { errors }, // Estado del formulario y sus errores
+    handleSubmit, // Función para manejar el envío del formulario
+    register, // Función para registrar campos del formulario
   } = useForm({
     values: {
+      // Valores iniciales del formulario
       Nombre: "",
       ApePaterno: "",
       ApeMaterno: "",
@@ -28,15 +36,18 @@ export const Perfil = () => {
     },
   });
 
+  // Función para manejar el envío del formulario
   const onSubmit = (data) => {
-    actualizarData(data)
+    // Llamar a la función 'actualizarData' del hook 'usePerfil' para actualizar la información del usuario
+    // Pasar los datos del formulario al hook 'usePerfil'
+    actualizarData(data);
   };
 
   return (
     <>
       <NavBar />
       {loading && <Loading />}
-      <div className="flex justify-center items-center h-[84vh]">
+      <div className="flex justify-center items-center sm:h-[84vh] ">
         <div className="w-width_Perfil bg-[#FFFAFA] flex items-center flex-col p-5">
           <img
             src={ProfileFhoto}
@@ -61,7 +72,7 @@ export const Perfil = () => {
               {errors.Nombre && <p className="text-red-600">Campo requerido</p>}
             </div>
             {/* apellido */}
-            <div className="flex col-start-1 col-end-4 gap-4">
+            <div className="col-start-1 col-end-4 gap-4 grid grid-cols-1 sm:grid-cols-2">
               <div className="flex flex-col gap-1">
                 <label>Apellido paterno:</label>
                 <input
@@ -74,7 +85,7 @@ export const Perfil = () => {
                   <p className="text-red-600">Campo requerido</p>
                 )}
               </div>
-              <div className="flex flex-col gap-1">
+              <div className=" flex flex-col gap-1 ">
                 <label>Apellido materno:</label>
                 <input
                   placeholder={dataUser?.ApeMaterno}
@@ -88,7 +99,7 @@ export const Perfil = () => {
               </div>
             </div>
             {/* telefono */}
-            <div>
+            <div className="col-start-1 col-end-4 sm:col-start-1 sm:col-end-2">
               <div className="flex gap-2 items-center">
                 <label>Telefono:</label>
                 <input
@@ -108,7 +119,7 @@ export const Perfil = () => {
               )}
             </div>
             {/* usuario */}
-            <div>
+            <div className="col-start-1 col-end-4 sm:col-start-2 sm:col-end-4 ">
               <div className="flex gap-2 items-center">
                 <label>Usuario:</label>
                 <input

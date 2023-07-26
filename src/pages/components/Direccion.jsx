@@ -12,9 +12,11 @@ export const Direccion = ({
   const [estados, setEstados] = useState(null);
   const [paises, setPaises] = useState(null);
 
+  // Función para obtener la lista de ciudades desde la API
   const getCiudades = async () => {
     try {
       const { data } = await apiQueries("/getCiudades");
+      // Si hay un error en la respuesta, no se actualiza el estado
       if (data?.error) return;
       setCiudades(data?.message);
     } catch (error) {
@@ -22,6 +24,7 @@ export const Direccion = ({
     }
   };
 
+  // Función para obtener la lista de estados desde la API
   const getEstados = async () => {
     try {
       const { data } = await apiQueries("/getEstados");
@@ -32,6 +35,7 @@ export const Direccion = ({
     }
   };
 
+  // Función para obtener la lista de países desde la API
   const getPaises = async () => {
     try {
       const { data } = await apiQueries("/getPaises");
@@ -42,18 +46,18 @@ export const Direccion = ({
     }
   };
 
+  // Efecto que se ejecuta una vez al montar el componente para obtener la información de ciudades, estados y países
   useEffect(() => {
     getCiudades();
     getEstados();
     getPaises();
   }, []);
 
-
   return (
     <div className="col-start-1 col-end-4">
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 flex-wrap">
         {/* calle */}
-        <div>
+        <div className="w-full sm:flex-1">
           <label>Calle:</label>
           <input
             placeholder={dataUser?.Calle || "Calle"}
@@ -64,11 +68,13 @@ export const Direccion = ({
           {errors.Calle && <p className="text-red-600">requerido</p>}
         </div>
         {/* numero de casa */}
-        <div>
+        <div className="w-full sm:flex-1">
           <label>Num. casa</label>
           <input
             placeholder={dataUser?.NumCas || "NumCas"}
-            {...register("NumCas", { required: isrequired ? isrequired : true })}
+            {...register("NumCas", {
+              required: isrequired ? isrequired : true,
+            })}
             type="text"
             className="w-full border border-[#cdcdcd] rounded-2xl outline-none focus:border-blue-300 pl-2"
           />

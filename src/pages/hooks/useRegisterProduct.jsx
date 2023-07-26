@@ -9,32 +9,39 @@ export const useRegisterProduct = () => {
   const [products, setProducts] = useState([]);
   const [activeUpdate, setActiveUpdate] = useState(false);
 
-  //   obtiene los colores
-  const getColors = async (colors) => {
+  // Función para obtener la lista de colores desde la API
+  const getColors = async () => {
     try {
+      // Realiza una consulta a la API para obtener la lista de colores de productos
       const { data } = await apiQueries("getColors");
 
+      // Si hay un error en la respuesta de la API, muestra un mensaje de error
       if (data?.error) {
         return toast.error("Error no hay colores de rosas");
       }
 
+      // Actualiza el estado 'colors' con los datos obtenidos
       setColors(data?.message);
     } catch (error) {
       console.log(error);
     }
   };
 
-  //   obtiene los tipos
+  // Función para obtener la lista de tipos de productos desde la API
   const getTypes = async () => {
     try {
+      // Realiza una consulta a la API para obtener la lista de tipos de productos
       const { data } = await apiQueries("/getTypes");
 
+      // Si hay un error en la respuesta de la API, muestra un mensaje de error
       if (data?.error) {
         return toast.error("Error no hay tipos");
       }
 
+      // Actualiza el estado 'types' con los datos obtenidos
       setTypes(data?.message);
     } catch (error) {
+      // Si ocurre un error durante la consulta a la API, muestra un mensaje de error y lo registra en la consola
       toast.error("Error de el servidor");
       console.log(error);
     }
@@ -45,7 +52,7 @@ export const useRegisterProduct = () => {
     getTypes();
   }, []);
 
-  //   subir haimage a cloudinary
+  // Función para subir una imagen a Cloudinary y obtener la URL segura de la imagen subida
   const uploadImage = async (image) => {
     setLoading(true);
     const formData = new FormData();
@@ -53,6 +60,7 @@ export const useRegisterProduct = () => {
     formData.append("upload_preset", "floreria-amapola");
 
     try {
+      // Realiza una solicitud POST a la API de Cloudinary para subir la imagen
       const { data } = await apiQueries.post(
         "https://api.cloudinary.com/v1_1/carlosdaniel/upload",
         formData,
@@ -63,9 +71,11 @@ export const useRegisterProduct = () => {
         }
       );
 
+      // Muestra un mensaje de éxito al subir la imagen y retorna la URL segura de la imagen subida
       toast.success("Imagen subida correctamente");
       return data?.secure_url;
     } catch (error) {
+      // Si ocurre un error al subir la imagen, muestra un mensaje de error y lo registra en la consola
       setLoading(false);
       toast.error("Error del servidor");
       console.log(error);
@@ -73,11 +83,13 @@ export const useRegisterProduct = () => {
     }
   };
 
-  // agregar buevo producto
+  // Función para agregar un nuevo producto a la API
   const addProduct = async (dataProducto, reset) => {
     try {
+      // Sube la imagen del producto a Cloudinary y obtiene la URL segura de la imagen subida
       const URL_IMAGE = await uploadImage(dataProducto?.imageURL[0]);
 
+      // Crea un nuevo objeto con los datos del producto y la URL de la imagen subida
       const newProduct = {
         imageURL: URL_IMAGE,
         Caracteristicas: dataProducto?.Caracteristicas,
@@ -90,43 +102,54 @@ export const useRegisterProduct = () => {
         Preccompra: dataProducto?.PrecCompra,
       };
 
+      // Realiza una solicitud POST a la API para agregar el nuevo producto
       const { data } = await apiQueries.post("addProduct", newProduct);
 
+      // Si hay un error en la respuesta de la API, muestra un mensaje de error
       if (data?.error) {
         setLoading(false);
         return toast.error("Producto no pudo ser guardado");
       }
 
+      // Muestra un mensaje de éxito al agregar el producto y actualiza la lista de productos
       toast.success("Producto agregado correctamente");
       getProducts();
       reset();
       setLoading(false);
     } catch (error) {
+      // Si ocurre un error durante la solicitud a la API, muestra un mensaje de error y lo registra en la consola
       setLoading(false);
       console.log(error);
       toast.error("Error del servidor");
     }
   };
 
+  // lo que hace esto es una peticion a la api
   const getProducts = async () => {
     try {
+      // esto ta da la respuesta de la peticion
       const { data } = await apiQueries("/getProducts");
 
+      // si ocurre un error te manda una alerta
       if (data?.error) {
         return toast.error("Error");
       }
 
+      // actualiza el estado 'products' con los datos obtenidos
       setProducts(data?.message);
     } catch (error) {
+      // si ocurre un error te manda una alerta
       toast.error("error");
       console.log(error);
     }
   };
 
+  // se ejcuta al cargar el componente y te ejecuta la funcion de obtener flores
   useEffect(() => {
     getProducts();
   }, []);
 
+  // funcion que sirve para eliminar flores de los productos existentes
   const deleteProduct = async (id) => {
     try {
       const { data } = await apiQueries.delete(`/deleteProduct/${id}`);
@@ -192,11 +215,11 @@ export const useRegisterProduct = () => {
       const { data } = await apiQueries.post("/updateProduct", newDataProduct);
 
       if (data?.error) {
-        setLoading(false)
-        return toast.error("Error al actualizar producto")
+        setLoading(false);
+        return toast.error("Error al actualizar producto");
       }
 
-      toast.success(data?.message)
+      toast.success(data?.message);
       setLoading(false);
       reset();
     } catch (error) {

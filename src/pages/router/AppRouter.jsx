@@ -15,6 +15,11 @@ export const AppRouter = () => {
 
   return (
     <Routes>
+      {/* Rutas protegidas según el rol del usuario */}
+      {/* Si el usuario es un CLIENTE, muestra las rutas de MenuProductos, ListAllProducts, MenuAnuncio y FlowerCart */}
+      {/* Si el usuario es un ADMINISTRADOR, muestra las rutas de Perfil, RegistrProvider y RegisterProduct */}
+      {/* Si el usuario no tiene un rol válido, se redirige a la página de Error404 */}
+      {/* Ruta principal que muestra MenuProductos si el usuario es un CLIENTE, o redirige a Perfil si es un ADMINISTRADOR */}{" "}
       <Route
         path="/"
         element={
@@ -25,6 +30,7 @@ export const AppRouter = () => {
           )
         }
       />
+      {/* Ruta que muestra ListAllProducts si el usuario es un CLIENTE, o redirige a Perfil si es un ADMINISTRADOR */}
       <Route
         path="/listProducts"
         element={
@@ -35,6 +41,7 @@ export const AppRouter = () => {
           )
         }
       />
+      {/* Ruta que muestra MenuAnuncio si el usuario es un CLIENTE, o redirige a Perfil si es un ADMINISTRADOR */}
       <Route
         path="/MenuAnuncio"
         element={
@@ -45,6 +52,7 @@ export const AppRouter = () => {
           )
         }
       />
+      {/* Ruta que muestra FlowerCart si el usuario es un CLIENTE, o redirige a Perfil si es un ADMINISTRADOR */}
       <Route
         path="/flowerCart"
         element={
@@ -55,7 +63,9 @@ export const AppRouter = () => {
           )
         }
       />
+      {/* Ruta que muestra Perfil si el usuario es un ADMINISTRADOR */}
       <Route path="/perfil" element={<Perfil />} />
+      {/* Ruta que muestra RegistrProvider si el usuario es un ADMINISTRADOR, o redirige a Error404 si no tiene el rol adecuado */}
       <Route
         path="/registerProvider"
         element={
@@ -66,6 +76,7 @@ export const AppRouter = () => {
           )
         }
       />
+      {/* Ruta que muestra RegisterProduct si el usuario es un ADMINISTRADOR, o redirige a Error404 si no tiene el rol adecuado */}
       <Route
         path="/registerProduct"
         element={

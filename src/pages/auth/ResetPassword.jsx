@@ -14,12 +14,16 @@ export const ResetPassword = () => {
     formState: { errors },
   } = useForm();
 
+  // funcion que ejecuta la funcion de restablecer contraseña
   const onSubmit = (data) => {
     resetPassword(data);
   };
 
+  // funcion que actualiza la cotraseña con la peticion a la api
   const resetPassword = async ({ correo }) => {
+    setIsLoading(true);
     try {
+      // peticion a la api  en la cual se le manda el correo que se quiere restablecer contraseña
       const { data } = await apiQueries.post("/recovery-pass", {
         email: correo,
       });
@@ -29,6 +33,7 @@ export const ResetPassword = () => {
         return toast.error("No se pudo restablecer la contraseña");
       }
 
+      // mensaje que muestra si se restablece las contraseña bien
       toast.success("Contraseña actualizada");
       setIsLoading(false);
       navigate("/");

@@ -3,7 +3,7 @@ import logo from "../../assets/logo_floreria.png";
 export const Anuncio = ({ allFlowers }) => {
   console.log(allFlowers[allFlowers.length - 1]?.imageURL);
   return (
-    <div className=" col-start-1 col-end-3 w-full relative ">
+    <div className=" col-start-1  Movil:col-end-3 w-full relative ">
       <Carousel
         autoPlay={true}
         showThumbs={false}

@@ -4,6 +4,7 @@ import { ProductCart } from "./components/ProductCart";
 import { useFlowerCar } from "./hooks/useFlowerCar";
 
 export const FlowerCart = () => {
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'useFlowerCar'
   const {
     tipoPago,
     car,
@@ -22,7 +23,7 @@ export const FlowerCart = () => {
       <NavBar />
       <div className="w-full min-h-screen flex justify-center">
         <div
-          className=" bg-[#ffecec] w-width_contenedor my-10 p-[20px] rounded-md flex justify-center gap-10
+          className=" bg-[#ffecec] w-width_contenedor my-10 p-[20px] rounded-md grid grid-cols-1  justify-center gap-10 Movil:max-w-md md:max-w-3xl md:grid-cols-2
         "
         >
           {/* productos carritos */}

@@ -11,7 +11,7 @@ export const ProductCart = ({ flower }) => {
   return (
     <>
       <div className="bg-white p-[10px] flex gap-5 rounded-lg justify-between">
-        <div className="w-[130px] h-[100px]  rounded-lg overflow-hidden">
+        <div className="w-[130px] h-[100px]  rounded-lg hidden sm:block ">
           <img
             className="w-full h-full object-cover"
             src={flower?.imageURL}
@@ -36,7 +36,7 @@ export const ProductCart = ({ flower }) => {
           </div>
         </div>
 
-        <div className="flex  flex-col justify-between">
+        <div className="flex  flex-col justify-between items-end">
           <div className="w-[25px] self-end">
             <img
               className="w-full"

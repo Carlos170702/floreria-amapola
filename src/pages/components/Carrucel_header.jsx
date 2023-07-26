@@ -16,7 +16,7 @@ export const Carrucel_header = () => {
         transitionTime={1}
       >
         <div
-          className="w-full h-[400px] bg-[rgba(0,0,0,0.2)]"
+          className="w-full 2-[400px] sm:h-[400px] bg-[rgba(0,0,0,0.2)]"
           style={{ opacity: 0.8 }}
         >
           <img
@@ -25,14 +25,14 @@ export const Carrucel_header = () => {
             src={carrucel1}
           />
         </div>
-        <div className="w-full h-[400px] bg-[rgba(0,0,0,0.2)]">
+        <div className="w-full 2-[400px] sm:h-[400px] bg-[rgba(0,0,0,0.2)]">
           <img
             style={{ opacity: 0.8 }}
             className="w-full h-full object-cover"
             src={carrucel2}
           />
         </div>
-        <div className="w-full h-[400px]">
+        <div className="w-full 2-[400px] sm:h-[400px] bg-[rgba(0,0,0,0.2)]">
           <img
             style={{ opacity: 0.8 }}
             className="w-full h-full object-cover"
@@ -42,11 +42,11 @@ export const Carrucel_header = () => {
       </Carousel>
 
       <div className="absolute top-10 gap-2 flex w-full justify-center items-center">
-        <img src={flor_decoration} alt="decoracion" className="h-20 " />
-        <h2 className="font-bold text-lg">
+        <img src={flor_decoration} alt="decoracion" className="h-20 hidden md:block" />
+        <h2 className="font-bold text-lg text-justify">
           ¡TU FUENTE CONFIABLE DE FLORES FRESCAS Y HERMOSAS!
         </h2>
-        <img src={flor_decoration} alt="decoracion" className="h-20 " />
+        <img src={flor_decoration} alt="decoracion" className="h-20 hidden md:block" />
       </div>
     </div>
   );

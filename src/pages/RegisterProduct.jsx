@@ -6,26 +6,27 @@ import { toast } from "react-hot-toast";
 
 export const RegisterProduct = () => {
   const {
-    colors,
-    types,
-    addProduct,
-    loading,
-    products,
-    deleteProduct,
-    activeUpdate,
-    setValuesUpdate,
-    resetAll,
-    updateProduct,
+    colors, // Lista de colores
+    types, // Lista de tipos
+    addProduct, // Función para agregar un producto
+    loading, // Estado de carga
+    products, // Lista de productos
+    deleteProduct, // Función para eliminar un producto
+    activeUpdate, // Estado para indicar si hay una actualización en curso
+    setValuesUpdate, // Función para establecer los valores de actualización
+    resetAll, // Función para reiniciar todos los campos
+    updateProduct, // Función para actualizar un producto
   } = useRegisterProduct();
+  // Desestructurar los valores y funciones proporcionados por el hook personalizado 'useForm'
   const {
-    setValue,
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors, defaultValues },
+    setValue, // Función para establecer el valor de los campos del formulario
+    register, // Función para registrar campos del formulario
+    handleSubmit, // Función para manejar la presentación del formulario
+    reset, // Función para reiniciar el formulario
+    formState: { defaultValues }, // Estado del formulario y valores predeterminados
   } = useForm({
     defaultValues: {
+      // Valores predeterminados para el formulario
       Nombre: "",
       CvColor: "SELECCIONA UN COLOR",
       CvTipo: "SELECCIONA UN TIPO",
@@ -38,7 +39,9 @@ export const RegisterProduct = () => {
     },
   });
 
+  // Función para manejar el envío del formulario
   const onSubmit = (data) => {
+    // Verificar si no se ha seleccionado un color o un tipo
     if (
       data?.CvColor === defaultValues?.CvColor ||
       data?.CvTipo === defaultValues?.CvTipo
@@ -48,8 +51,13 @@ export const RegisterProduct = () => {
     // if (data?.PrecCompra > data?.PreVenta)
     //   return toast.error("Precios no validos");
 
+    // Verificar si no se ha seleccionado una imagen
     if (data?.imageURL.length <= 0) return toast.error("Selecciona una imagen");
 
+    // Si hay una actualización en curso ('activeUpdate' es true), llamar a la función 'updateProduct' del hook 'useRegisterProduct'
+    // Pasar los datos del formulario y la función para reiniciar el formulario ('reset')
+    // Si no hay una actualización en curso, llamar a la función 'addProduct' del hook 'useRegisterProduct'
+    // Pasar los datos del formulario y la función para reiniciar el formulario ('reset')
     activeUpdate ? updateProduct(data, reset) : addProduct(data, reset);
   };
 
@@ -58,9 +66,9 @@ export const RegisterProduct = () => {
       <NavBar />
       {loading && <Loading />}
       <div className="flex justify-center py-10 px-2">
-        <div className="flex gap-2 items-start">
+        <div className="grid grid-cols-1 gap-2 items-start xl:grid-cols-autotable">
           <form
-            className="flex-1 gap-y-5 flex flex-col p-3 w-[350px] border"
+            className="flex-1 gap-y-5 flex flex-col p-3 max-w-[400px] border"
             onSubmit={handleSubmit(onSubmit)}
           >
             <h2 className="text-center font-bold tracking-widest text-xl">
@@ -218,58 +226,60 @@ export const RegisterProduct = () => {
             </div>
           </form>
           {/* table */}
-          <table>
-            <thead className="border">
-              <tr className="">
-                <th className="px-3 border">ID</th>
-                <th className="px-3 border">Nombre</th>
-                <th className="px-3 border">Cantidad</th>
-                <th className="px-3 border">Color</th>
-                <th className="px-3 border">Tipo</th>
-                <th className="px-3 border">Caracteristicas</th>
-                <th className="px-3 border">Precio Compra</th>
-                <th className="px-3 border">Precio venta</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="border">
-              {products.length > 0 &&
-                products?.map((product, index) => (
-                  <tr className="" key={product?.CvInventario}>
-                    <td className=" border px-2 text-center">{index + 1}</td>
-                    <td className=" border px-2 ">{product?.Nombre}</td>
-                    <td className=" border px-2 text-center">
-                      {product?.Existencia}
-                    </td>
-                    <td className=" border px-2 ">{product?.Color}</td>
-                    <td className=" border px-2 ">{product?.Tipo}</td>
-                    <td className=" border px-2 ">
-                      {product?.Caracteristicas}
-                    </td>
-                    <td className=" border px-2 text-center">
-                      {product?.PrecCompra}
-                    </td>
-                    <td className=" border px-2 text-center">
-                      {product?.PreVenta}
-                    </td>
-                    <td className="text-xs flex gap-1 mx-2 my-1 ">
-                      <button
-                        className=" p-2 px-3 bg-red-400 text-white rounded uppercase cursor-pointer"
-                        onClick={() => deleteProduct(product?.CvInventario)}
-                      >
-                        Eliminar
-                      </button>
-                      <button
-                        onClick={() => setValuesUpdate(product, setValue)}
-                        className=" p-2 px-3 bg-indigo-500 text-white rounded uppercase cursor-pointer"
-                      >
-                        Editar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className="overflow-auto xl:overflow-visible">
+            <table>
+              <thead className="border">
+                <tr className="">
+                  <th className="px-3 border">ID</th>
+                  <th className="px-3 border">Nombre</th>
+                  <th className="px-3 border">Cantidad</th>
+                  <th className="px-3 border">Color</th>
+                  <th className="px-3 border">Tipo</th>
+                  <th className="px-3 border">Caracteristicas</th>
+                  <th className="px-3 border">Precio Compra</th>
+                  <th className="px-3 border">Precio venta</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="border">
+                {products.length > 0 &&
+                  products?.map((product, index) => (
+                    <tr className="" key={product?.CvInventario}>
+                      <td className=" border px-2 text-center">{index + 1}</td>
+                      <td className=" border px-2 ">{product?.Nombre}</td>
+                      <td className=" border px-2 text-center">
+                        {product?.Existencia}
+                      </td>
+                      <td className=" border px-2 ">{product?.Color}</td>
+                      <td className=" border px-2 ">{product?.Tipo}</td>
+                      <td className=" border px-2 ">
+                        {product?.Caracteristicas}
+                      </td>
+                      <td className=" border px-2 text-center">
+                        {product?.PrecCompra}
+                      </td>
+                      <td className=" border px-2 text-center">
+                        {product?.PreVenta}
+                      </td>
+                      <td className="text-xs flex gap-1 mx-2 my-1 ">
+                        <button
+                          className=" p-2 px-3 bg-red-400 text-white rounded uppercase cursor-pointer"
+                          onClick={() => deleteProduct(product?.CvInventario)}
+                        >
+                          Eliminar
+                        </button>
+                        <button
+                          onClick={() => setValuesUpdate(product, setValue)}
+                          className=" p-2 px-3 bg-indigo-500 text-white rounded uppercase cursor-pointer"
+                        >
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>

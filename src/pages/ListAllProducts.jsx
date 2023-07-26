@@ -12,8 +12,8 @@ export const ListAllProducts = () => {
     <>
       {flowerSelected && <ModalProduct flowerSelected={flowerSelected} />}
       <NavBar />
-      <div className="w-width_contenedor ml-auto mr-auto mt-5 flex gap-5">
-        <div className="relative w-[220px]">
+      <div className="w-width_contenedor ml-auto mr-auto mt-5 grid grid-col-1 gap-3 Movil:grid-cols-2 md:grid-cols-3">
+        <div className="relative  Movil:col-start-1 Movil:col-end-3 md:col-end-2">
           <input
             name="Nombre"
             onChange={(e) => {
@@ -28,7 +28,7 @@ export const ListAllProducts = () => {
             size={20}
           />
         </div>
-        <div className="w-[220px] flex gap-1 ">
+        <div className="flex gap-1 items-center">
           <p className="text-base">Color:</p>
           <select
             defaultValue={"SELECCIONA UN COLOR"}
@@ -49,21 +49,21 @@ export const ListAllProducts = () => {
               ))}
           </select>
         </div>
-        <div className="w-auto flex gap-1 ">
+        <div className="w-auto flex gap-1 items-center">
           <p className="text-base">Precio:</p>
           <input
             name="Precio"
             onChange={onInputChange}
             type="range"
-            min="0"
-            max="5000"
+            min="1  "
+            max="3000"
             step="2"
           />
           <p>{`$ ${formState?.Precio} MXN`}</p>
         </div>
       </div>
 
-      <div className="w-width_contenedor ml-auto mr-auto mb-5 mt-10 grid grid-cols-2 sm:grid-col-3 md:grid-cols-4 lg:grid-col-5 gap-5 justify-items-center relative">
+      <div className="w-width_contenedor ml-auto mr-auto mb-5 mt-10 grid grid-cols-1 Movil:grid-cols-2 sm:grid-col-3 md:grid-cols-4 lg:grid-col-5 gap-5 justify-items-center relative">
         {!!flowersFilter ? (
           flowersFilter?.map((flower, index) => (
             <CardProduct

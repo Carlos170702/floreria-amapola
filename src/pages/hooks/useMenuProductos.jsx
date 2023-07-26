@@ -31,20 +31,36 @@ export const useMenuProductos = () => {
 
   // esto es para filtrar los datos de las flores
   const filtrarFlores = () => {
-    const resultados = allFlowers?.filter((flor) => {
-      const nombreCoincide = flor.Nombre.toLowerCase().includes(
-        formState?.Nombre?.toLowerCase()
-      );
+    let flowerFilter = [...allFlowers];
 
-      const precioCoincide = flor.PreVenta < formState?.Precio;
+    if (formState?.Nombre.length > 0) {
+      flowerFilter = flowerFilter?.filter((flor) => {
+        const nombreCoincide = flor.Nombre.toLowerCase().includes(
+          formState?.Nombre?.toLowerCase()
+        );
+        return nombreCoincide;
+      });
+    }
 
-      const colorCoincide =
-        flor.Color.toLowerCase() === formState?.Color?.toLowerCase();
+    if (formState.Color.length > 0) {
+      flowerFilter = flowerFilter?.filter((flor) => {
+        const colorCoinciden = flor.Color.toLowerCase().includes(
+          formState.Color.toLowerCase()
+        );
+        return colorCoinciden;
+      });
+    }
 
-      return nombreCoincide || precioCoincide || colorCoincide;
-    });
+    if (formState.Precio > 0) {
+      flowerFilter = flowerFilter?.filter((flor) => {
+        const precioConciden = flor?.PreVenta < formState.Precio;
 
-    setFlowersFilter(resultados);
+        return precioConciden;
+      });
+    }
+
+    // Actualizar el estado flowersFilter con los resultados del filtrado
+    setFlowersFilter(flowerFilter);
   };
 
   useEffect(() => {

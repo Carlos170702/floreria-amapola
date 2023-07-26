@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import logo_floreria from "../../assets/logo_floreria.png";
 import { Direccion } from "../components/Direccion";
-import { useEffect } from "react";
 import { useRegister } from "./hooks/useRegister";
 import { Loading } from "../components/Loading";
 
@@ -11,7 +10,6 @@ export const Register = () => {
     register,
     formState: { errors },
     handleSubmit,
-    watch,
     setError,
   } = useForm({
     defaultValues: {
@@ -21,12 +19,13 @@ export const Register = () => {
     },
   });
 
+  // funcion que ejecuta la funcion de registrar que biene del hookUseRegister
   const onSubmit = (data) => {
+    // valida si las contraseñas escrias son iguales
     if (data.Contraseña !== data.Confirmar) {
       return setError("Confirmar");
     }
     handleRegister(data);
-
   };
 
   return (

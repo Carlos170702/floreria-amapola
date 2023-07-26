@@ -14,6 +14,7 @@ export const useFlowerCar = () => {
 
   const { car, dataUser, deleteAllCar } = useContext(UseContex);
 
+  // Obtener los tipos de pago disponibles
   const getTipoPago = async () => {
     try {
       const { data } = await apiQueries("/getTipoPago");
@@ -25,10 +26,12 @@ export const useFlowerCar = () => {
   };
 
   useEffect(() => {
+    // Cuando el componente se monta, obtener los tipos de pago disponibles
     getTipoPago();
     getDate();
   }, []);
 
+  // Calcular el subtotal sumando los precios de las flores en el carrito
   const calculateSubtotal = () => {
     let subtotal = 0;
     for (const flower of car) {
@@ -37,8 +40,9 @@ export const useFlowerCar = () => {
     setSubtotal(subtotal.toFixed(2));
   };
 
+  // Calcular el IVA multiplicando el subtotal por 0.16 (16%)
   const calculateIva = () => {
-    const iva = subtotal * 0.2;
+    const iva = subtotal * 0.16;
     setIva(iva.toFixed(2));
   };
 
@@ -48,6 +52,7 @@ export const useFlowerCar = () => {
     setTotal(amountTotal.toFixed(2));
   };
 
+  // Obtener la fecha actual y formatearla como "yyyy-mm-dd"
   const getDate = () => {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -58,22 +63,27 @@ export const useFlowerCar = () => {
     setDate(formattedDate);
   };
 
+  // Cuando se actualiza el carrito de compras, recalcular el subtotal
   useEffect(() => {
     calculateSubtotal();
   }, [car]);
 
+  // Cuando se actualiza el subtotal, recalcular el IVA
   useEffect(() => {
     calculateIva();
   }, [subtotal]);
 
+  // Cuando se actualiza el IVA, recalcular el total
   useEffect(() => {
     calculateTotal();
   }, [iva]);
 
+  // Actualizar el estado tipoPagoSelected cuando el usuario selecciona un tipo de pago
   const handleChangeTipoPago = (e) => {
     setTipoPagoSelected(e.target.value);
   };
 
+  // Realizar la venta enviando los detalles a la API
   const makeSale = async () => {
     setIsLoading(true);
     const dataSale = {
@@ -94,6 +104,7 @@ export const useFlowerCar = () => {
     };
 
     try {
+      // Validar que se haya seleccionado un tipo de pago
       if (tipoPagoSelected == 0) {
         setIsLoading(false);
         return toast("Selecciona un tipo de pago", {
@@ -106,6 +117,7 @@ export const useFlowerCar = () => {
         });
       }
 
+      // Realizar la consulta a la API para realizar la venta
       const { data } = await apiQueries.post("/addToVenta", dataSale);
 
       if (data?.error) {
@@ -113,6 +125,7 @@ export const useFlowerCar = () => {
         return toast.error(data?.message);
       }
 
+      // Mostrar mensaje de éxito y vaciar el carrito de compras
       setTimeout(() => {
         setIsLoading(false);
         toast.success(data?.message);

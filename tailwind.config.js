@@ -8,6 +8,12 @@ export default {
         width_contenedor: "min(90%, 1000px)",
         width_Perfil: "min(90%, 500px)",
       },
+      gridTemplateColumns:{
+        "autotable": '350px auto',
+      },
+      screens:{
+        "Movil": '360px'
+      }
     },
   },
   plugins: [],
